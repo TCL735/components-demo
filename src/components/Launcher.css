@@ -1,5 +1,16 @@
 .modal {
-  width: 80%;
-  height: 80%;
+  border-radius: 25px;
   background-color: white;
+  overflow: scroll;
+}
+
+.MuiDialog-paper {
+  border-radius: 25px !important;
+}
+
+.button-command-e {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between !important;
+  padding: 5px !important;
 }

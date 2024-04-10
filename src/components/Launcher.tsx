@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Box, Button, InputAdornment, Modal, TextField } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
+import { IconLayoutGrid } from "@tabler/icons-react";
+import { LauncherContents } from "./LauncherContents";
 import { useKeyPress } from "../utils/hooks";
 import "./Launcher.css";
 
@@ -21,17 +29,33 @@ export function Launcher() {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <Button variant="outlined">⌘E</Button>
+                <Button
+                  className="button-command-e"
+                  variant="outlined"
+                  size="large"
+                >
+                  <IconLayoutGrid />
+                  <span>⌘E</span>
+                </Button>
               </InputAdornment>
             ),
           }}
         />
       ) : null}
-      <Modal open={isOpen} onClose={handleClose}>
-        <Box mx={20} my={10} className="modal">
-          <div>hello</div>
-        </Box>
-      </Modal>
+      <Dialog
+        className="modal"
+        fullWidth
+        maxWidth="lg"
+        open={isOpen}
+        onClose={handleClose}
+        aria-modal="true"
+        aria-labelledby="modal-title-stuff"
+        aria-describedby="modal-description"
+      >
+        <DialogContent className="modal-content">
+          <LauncherContents />
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
