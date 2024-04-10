@@ -30,7 +30,7 @@ export const ContentGroup: FC<ContenGroupProps> = ({ groupName }) => {
         {sectionRows.map((section) => {
           const Icon = section.icon;
           return (
-            <div key={section.name} className="section-row">
+            <Box key={section.name} className="section-row">
               <Box
                 className="section-icon-container"
                 style={{ backgroundColor: section.iconColor }}
@@ -43,7 +43,14 @@ export const ContentGroup: FC<ContenGroupProps> = ({ groupName }) => {
               <Typography className="section-description">
                 {section.description}
               </Typography>
-            </div>
+              <Button
+                variant="outlined"
+                id="section-button-shortcut"
+                size="small"
+              >
+                <span>{section.shortcut}</span>
+              </Button>
+            </Box>
           );
         })}
       </Stack>

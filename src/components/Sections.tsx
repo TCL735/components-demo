@@ -5,6 +5,7 @@ import {
   IconBrandAws,
   IconBrandGithub,
   IconBuildingWarehouse,
+  IconCheckbox,
   IconCompass,
   IconDatabase,
   IconDog,
@@ -54,6 +55,7 @@ export interface Section {
   group: GroupName;
   name: string;
   description: string;
+  shortcut: string;
 }
 
 export const groups: Array<Group> = [
@@ -86,6 +88,7 @@ export const sections: Array<Section> = [
     group: GroupName.Data,
     name: "Catalog",
     description: "Description of application",
+    shortcut: "⌥ C",
   },
   {
     icon: IconEye,
@@ -93,6 +96,7 @@ export const sections: Array<Section> = [
     group: GroupName.Data,
     name: "Observability",
     description: "Description of application",
+    shortcut: "⌥ O",
   },
   {
     icon: IconTournament,
@@ -100,6 +104,7 @@ export const sections: Array<Section> = [
     group: GroupName.Data,
     name: "Lineage",
     description: "Description of application",
+    shortcut: "⌥ L",
   },
   {
     icon: IconSwitch3,
@@ -107,6 +112,7 @@ export const sections: Array<Section> = [
     group: GroupName.Data,
     name: "ETL",
     description: "Description of application",
+    shortcut: "⌥ E",
   },
 
   {
@@ -115,6 +121,7 @@ export const sections: Array<Section> = [
     group: GroupName.Security,
     name: "Access",
     description: "Description of application",
+    shortcut: "⌥ A",
   },
   {
     icon: IconAlertTriangle,
@@ -122,6 +129,7 @@ export const sections: Array<Section> = [
     group: GroupName.Security,
     name: "Logs",
     description: "Description of application",
+    shortcut: "⌥ G",
   },
   {
     icon: IconCompass,
@@ -129,6 +137,7 @@ export const sections: Array<Section> = [
     group: GroupName.Security,
     name: "Discovery",
     description: "Description of application",
+    shortcut: "⌥ D",
   },
   {
     icon: IconFileDescription,
@@ -136,14 +145,23 @@ export const sections: Array<Section> = [
     group: GroupName.Security,
     name: "Policies",
     description: "Description of application",
+    shortcut: "⌥ P",
   },
-
+  {
+    icon: IconCheckbox,
+    iconColor: IconColor.Security,
+    group: GroupName.Security,
+    name: "Compliance",
+    description: "Description of application",
+    shortcut: "⌥ Q",
+  },
   {
     icon: IconBrandAws,
     iconColor: IconColor.Store,
     group: GroupName.Store,
     name: "AWS",
     description: "Description of application",
+    shortcut: "⌥ ↑ A",
   },
   {
     icon: IconDog,
@@ -151,6 +169,7 @@ export const sections: Array<Section> = [
     group: GroupName.Store,
     name: "Datadog",
     description: "Description of application",
+    shortcut: "⌥ ↑ D",
   },
   {
     icon: IconSquareLetterS,
@@ -158,6 +177,7 @@ export const sections: Array<Section> = [
     group: GroupName.Store,
     name: "Splunk",
     description: "Description of application",
+    shortcut: "⌥ ↑ S",
   },
   {
     icon: IconHexagonNumber3,
@@ -165,6 +185,7 @@ export const sections: Array<Section> = [
     group: GroupName.Store,
     name: "S3",
     description: "Description of application",
+    shortcut: "⌥ ↑ 3",
   },
   {
     icon: IconBrandGithub,
@@ -172,6 +193,7 @@ export const sections: Array<Section> = [
     group: GroupName.Store,
     name: "Github",
     description: "Description of application",
+    shortcut: "⌥ ↑ G",
   },
   {
     icon: IconTelescope,
@@ -179,6 +201,7 @@ export const sections: Array<Section> = [
     group: GroupName.Store,
     name: "datahub",
     description: "Description of application",
+    shortcut: "⌥ ↑ G",
   },
   {
     icon: IconPlus,
@@ -186,6 +209,7 @@ export const sections: Array<Section> = [
     group: GroupName.Store,
     name: "Manage Store apps",
     description: "Description of application",
+    shortcut: "⌥ ↑ G",
   },
 
   {
@@ -194,6 +218,7 @@ export const sections: Array<Section> = [
     group: GroupName.Tools,
     name: "API Keys",
     description: "Description of application",
+    shortcut: "⌥ K",
   },
   {
     icon: IconSum,
@@ -201,6 +226,7 @@ export const sections: Array<Section> = [
     group: GroupName.Tools,
     name: "Sigma",
     description: "Description of application",
+    shortcut: "⌥ S",
   },
   {
     icon: IconBinaryTree,
@@ -208,6 +234,7 @@ export const sections: Array<Section> = [
     group: GroupName.Tools,
     name: "Workflow",
     description: "Description of application",
+    shortcut: "⌥ W",
   },
 
   {
@@ -216,6 +243,7 @@ export const sections: Array<Section> = [
     group: GroupName.Settings,
     name: "Common Setting A",
     description: "Description of application",
+    shortcut: "⌥ 0",
   },
   {
     icon: IconSettingsDollar,
@@ -223,5 +251,6 @@ export const sections: Array<Section> = [
     group: GroupName.Settings,
     name: "Special Setting B",
     description: "Description of application",
+    shortcut: "⌥ 9",
   },
 ];

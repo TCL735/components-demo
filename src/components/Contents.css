@@ -8,7 +8,7 @@
 
 .textfield-search {
   .MuiInputBase-root {
-    background-color: #f0f0f0;
+    background-color: #e8e8e8;
     border-radius: 15px;
   }
 }
@@ -20,6 +20,7 @@
   justify-content: space-between;
   padding: 5px;
   background-color: white;
+  border-radius: 10px;
 }
 
 .section-row {
@@ -29,6 +30,10 @@
   align-items: center;
   gap: 10px;
   margin: 10px;
+}
+.section-row:hover {
+  background-color: #ffffff;
+  cursor: pointer;
 }
 
 .section-name {
@@ -49,4 +54,9 @@
   border: 1px solid black;
   color: white;
   border-radius: 5px;
+}
+
+#section-button-shortcut {
+  margin-left: auto;
+  border-radius: 10px;
 }
