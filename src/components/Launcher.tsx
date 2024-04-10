@@ -7,7 +7,7 @@ import {
   TextField,
 } from "@mui/material";
 import { IconLayoutGrid } from "@tabler/icons-react";
-import { LauncherContents } from "./LauncherContents";
+import { Contents } from "./Contents";
 import { useKeyPress } from "../utils/hooks";
 import "./Launcher.css";
 
@@ -52,8 +52,8 @@ export function Launcher() {
         aria-labelledby="modal-title-stuff"
         aria-describedby="modal-description"
       >
-        <DialogContent className="modal-content">
-          <LauncherContents />
+        <DialogContent id="modal-content">
+          <Contents />
         </DialogContent>
       </Dialog>
     </>
