@@ -46,26 +46,26 @@ export function Launcher() {
           }}
         />
       ) : null}
-      <Dialog
-        className="modal"
-        fullWidth
-        maxWidth="lg"
-        open={isOpen}
-        onClose={handleClose}
-        aria-modal="true"
-        aria-labelledby="modal-title-stuff"
-        aria-describedby="modal-description"
-      >
-        <DialogContent id="modal-content">
-          <GroupsContext.Provider value={groups}>
-            <Header
-              selectedGroup={selectedGroup}
-              setSelectedGroup={setSelectedGroup}
-            />
+      <GroupsContext.Provider value={groups}>
+        <Dialog
+          className="modal"
+          fullWidth
+          maxWidth="lg"
+          open={isOpen}
+          onClose={handleClose}
+          aria-modal="true"
+          aria-labelledby="modal-title-stuff"
+          aria-describedby="modal-description"
+        >
+          <Header
+            selectedGroup={selectedGroup}
+            setSelectedGroup={setSelectedGroup}
+          />
+          <DialogContent className="modal-content">
             <Contents selectedGroup={selectedGroup} />
-          </GroupsContext.Provider>
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+      </GroupsContext.Provider>
     </>
   );
 }

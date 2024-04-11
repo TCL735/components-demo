@@ -1,7 +1,10 @@
-#modal-content {
+.modal {
+  background-color: #f8f8f8;
+}
+
+.modal-content.MuiDialogContent-root {
   overflow: scroll;
   padding: 0;
-  background-color: #f8f8f8;
   height: 50rem;
 }
 
