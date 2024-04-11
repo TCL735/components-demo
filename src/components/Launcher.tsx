@@ -9,7 +9,7 @@ import {
 import { IconLayoutGrid } from "@tabler/icons-react";
 import { Contents } from "./Contents";
 import { groups } from "./Sections";
-import { useKeyPress } from "../utils/hooks";
+import { useKeyPress, GroupsContext } from "../utils/hooks";
 import "./Launcher.css";
 
 export function Launcher() {
@@ -54,7 +54,9 @@ export function Launcher() {
         aria-describedby="modal-description"
       >
         <DialogContent id="modal-content">
-          <Contents groups={groups} />
+          <GroupsContext.Provider value={groups}>
+            <Contents />
+          </GroupsContext.Provider>
         </DialogContent>
       </Dialog>
     </>

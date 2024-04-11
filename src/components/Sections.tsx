@@ -29,6 +29,7 @@ import {
 } from "@tabler/icons-react";
 
 export enum GroupName {
+  All = "All",
   Data = "Data",
   Security = "Security",
   Store = "Store",
@@ -36,7 +37,8 @@ export enum GroupName {
   Settings = "Settings",
 }
 
-enum IconColor {
+export enum IconColor {
+  All = "lightgreen",
   Data = "blue",
   Security = "purple",
   Store = "grey",
@@ -46,6 +48,7 @@ enum IconColor {
 
 export interface Group {
   icon: FC;
+  iconColor: IconColor;
   name: GroupName;
 }
 
@@ -61,22 +64,27 @@ export interface Section {
 export const groups: Array<Group> = [
   {
     icon: IconDatabase,
+    iconColor: IconColor.Data,
     name: GroupName.Data,
   },
   {
     icon: IconLock,
+    iconColor: IconColor.Security,
     name: GroupName.Security,
   },
   {
     icon: IconBuildingWarehouse,
+    iconColor: IconColor.Store,
     name: GroupName.Store,
   },
   {
     icon: IconTool,
+    iconColor: IconColor.Tools,
     name: GroupName.Tools,
   },
   {
     icon: IconSettings,
+    iconColor: IconColor.Settings,
     name: GroupName.Settings,
   },
 ];

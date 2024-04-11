@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+} from "react";
+import { Group, Section, groups, sections } from "../components/Sections";
 
 export const useKeyPress = (
   keys: string[],
@@ -30,3 +37,6 @@ export const useKeyPress = (
     return () => document.removeEventListener("keydown", handleKeyPress);
   }, [handleKeyPress]);
 };
+
+export const GroupsContext = createContext<Array<Group>>(groups);
+export const SectionsContext = createContext<Array<Section>>(sections);
