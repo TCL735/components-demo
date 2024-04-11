@@ -7,9 +7,11 @@ import {
   TextField,
 } from "@mui/material";
 import { IconLayoutGrid } from "@tabler/icons-react";
+import { groups } from "../../data";
+import { useKeyPress, GroupsContext } from "../../utils/hooks";
+import { GroupName } from "../types";
 import { Contents } from "./Contents";
-import { groups } from "../data";
-import { useKeyPress, GroupsContext } from "../utils/hooks";
+import { Header } from "./Header";
 import "./Launcher.css";
 
 export function Launcher() {
@@ -17,6 +19,7 @@ export function Launcher() {
   useKeyPress(["e"], (event) => {
     setIsOpen(true);
   });
+  const [selectedGroup, setSelectedGroup] = useState(GroupName.All);
 
   const handleClick = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
@@ -55,7 +58,11 @@ export function Launcher() {
       >
         <DialogContent id="modal-content">
           <GroupsContext.Provider value={groups}>
-            <Contents />
+            <Header
+              selectedGroup={selectedGroup}
+              setSelectedGroup={setSelectedGroup}
+            />
+            <Contents selectedGroup={selectedGroup} />
           </GroupsContext.Provider>
         </DialogContent>
       </Dialog>
