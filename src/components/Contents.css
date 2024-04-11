@@ -70,10 +70,15 @@
   margin: 20px 10px;
 }
 
-.navigation-button.MuiButton-root {
+.navigation-button.MuiButton-root,
+.navigation-tab-button.MuiButton-root {
   border: 1px solid lightgray;
   border-radius: 25px;
   text-transform: none;
   color: black;
   font-weight: bold;
+}
+
+.navigation-tab-button.MuiButton-root {
+  margin-left: auto;
 }

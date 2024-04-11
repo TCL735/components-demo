@@ -1,4 +1,4 @@
-import React, { FC, createRef, forwardRef, useMemo, useRef } from "react";
+import React, { FC, forwardRef, useContext, useMemo, useState } from "react";
 import {
   Box,
   Button,
@@ -7,39 +7,69 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { IconSearch } from "@tabler/icons-react";
-import { GroupName, Group, sections } from "./Sections";
+import { IconSearch, IconArrowsRightLeft } from "@tabler/icons-react";
+import { GroupName, Group, sections, IconColor } from "./Sections";
 import "./Contents.css";
+import { GroupsContext, SectionsContext } from "../utils/hooks";
 
 interface ContentNavigationProps {
   groups: Array<Group>;
-  refs: React.MutableRefObject<any[]>;
+  selectedGroup: GroupName;
+  setSelectedGroup: React.Dispatch<React.SetStateAction<GroupName>>;
 }
 
 export const ContentNavigation: FC<ContentNavigationProps> = ({
   groups,
-  refs,
+  selectedGroup,
+  setSelectedGroup,
 }) => {
-  const handleClick = (index: number) => {
-    refs?.current?.[index]?.current.scrollIntoView();
+  const handleButtonTab = () => {
+    const currentIndex = groups.findIndex(
+      (group) => group.name === selectedGroup,
+    );
+    if (currentIndex === groups.length - 1) {
+      setSelectedGroup(GroupName.All);
+    } else {
+      setSelectedGroup(groups[currentIndex + 1].name);
+    }
   };
 
   return (
     <Box className="navigation-bar">
-      <Button className="navigation-button">All</Button>
-      {groups.map((group, index) => {
-        const Icon = group.icon;
+      <Button
+        className="navigation-button"
+        sx={{
+          backgroundColor: selectedGroup === GroupName.All ? IconColor.All : "",
+        }}
+        onClick={() => setSelectedGroup(GroupName.All)}
+      >
+        All
+      </Button>
+      {groups.map((group) => {
+        const { icon: NavIcon } = group;
         return (
           <Button
             key={group.name}
             className="navigation-button"
-            onClick={() => handleClick(index)}
+            sx={
+              selectedGroup === group.name
+                ? {
+                    backgroundColor: IconColor[group.name],
+                    color: "#ffffff",
+                  }
+                : null
+            }
+            onClick={() => setSelectedGroup(group.name)}
           >
-            <Icon />
+            <NavIcon />
             {group.name}
           </Button>
         );
       })}
+      <Button className="navigation-tab-button" onClick={handleButtonTab}>
+        <IconArrowsRightLeft />
+        tabs
+      </Button>
     </Box>
   );
 };
@@ -47,54 +77,60 @@ export const ContentNavigation: FC<ContentNavigationProps> = ({
 interface ContentGroupProps {
   groupName: GroupName;
 }
-export const ContentGroup = forwardRef(
-  ({ groupName }: ContentGroupProps, ref) => {
-    const sectionRows = useMemo(
-      () => sections.filter((section) => section.group === groupName),
-      [groupName],
-    );
+export const ContentGroup: FC<ContentGroupProps> = ({ groupName }) => {
+  const sections = useContext(SectionsContext);
+  const sectionRows = useMemo(
+    () => sections.filter((section) => section.group === groupName),
+    [groupName, sections],
+  );
 
-    return (
-      <Grid item xs={12}>
-        <Typography variant="h6" id="group-name">
-          {groupName}
-        </Typography>
-        <Box ref={ref}>
-          {sectionRows.map((section) => {
-            const Icon = section.icon;
-            return (
-              <Box key={section.name} className="section-row">
-                <Box
-                  className="section-icon-container"
-                  style={{ backgroundColor: section.iconColor }}
-                >
-                  <Icon />
-                </Box>
-                <Typography variant="h6" className="section-name">
-                  {section.name}
-                </Typography>
-                <Typography className="section-description">
-                  {section.description}
-                </Typography>
-                <Button
-                  variant="outlined"
-                  id="section-button-shortcut"
-                  size="small"
-                >
-                  <span>{section.shortcut}</span>
-                </Button>
+  return (
+    <Grid item xs={12}>
+      <Typography variant="h6" id="group-name">
+        {groupName}
+      </Typography>
+      <Box>
+        {sectionRows.map((section) => {
+          const Icon = section.icon;
+          return (
+            <Box key={section.name} className="section-row">
+              <Box
+                className="section-icon-container"
+                style={{ backgroundColor: section.iconColor }}
+              >
+                <Icon />
               </Box>
-            );
-          })}
-        </Box>
-      </Grid>
-    );
-  },
-);
+              <Typography variant="h6" className="section-name">
+                {section.name}
+              </Typography>
+              <Typography className="section-description">
+                {section.description}
+              </Typography>
+              <Button
+                variant="outlined"
+                id="section-button-shortcut"
+                size="small"
+              >
+                <span>{section.shortcut}</span>
+              </Button>
+            </Box>
+          );
+        })}
+      </Box>
+    </Grid>
+  );
+};
 
-export const Contents = forwardRef((props: { groups: Array<Group> }, ref) => {
-  const { groups } = props;
-  const groupRefs = useRef(Array.from(groups, () => createRef()));
+export const Contents = forwardRef((_, ref) => {
+  const [selectedGroup, setSelectedGroup] = useState(GroupName.All);
+
+  const groups = useContext(GroupsContext);
+  const filteredGroups = groups.filter((group) => {
+    if (selectedGroup === GroupName.All) {
+      return true;
+    }
+    return selectedGroup === group.name;
+  });
 
   return (
     <Box id="contents" mx={10} my={5} ref={ref}>
@@ -122,17 +158,19 @@ export const Contents = forwardRef((props: { groups: Array<Group> }, ref) => {
             }}
           />
         </Box>
-        <ContentNavigation groups={groups} refs={groupRefs} />
+        <ContentNavigation
+          groups={groups}
+          selectedGroup={selectedGroup}
+          setSelectedGroup={setSelectedGroup}
+        />
       </Box>
 
       <Grid container rowSpacing={2} className="content-body">
-        {groups.map((group, index) => (
-          <ContentGroup
-            key={group.name}
-            groupName={group.name}
-            ref={groupRefs.current?.[index]}
-          />
-        ))}
+        <SectionsContext.Provider value={sections}>
+          {filteredGroups.map((group) => (
+            <ContentGroup key={group.name} groupName={group.name} />
+          ))}
+        </SectionsContext.Provider>
       </Grid>
     </Box>
   );
