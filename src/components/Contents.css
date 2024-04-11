@@ -1,5 +1,6 @@
 #contents {
   margin: 0;
+  position: relative;
 }
 
 .contents-search {
@@ -30,10 +31,10 @@
   align-items: center;
   gap: 10px;
   margin: 10px;
-}
-.section-row:hover {
-  background-color: #ffffff;
-  cursor: pointer;
+  &:hover {
+    background-color: #ffffff;
+    cursor: pointer;
+  }
 }
 
 .section-name {
@@ -59,4 +60,20 @@
 #section-button-shortcut {
   margin-left: auto;
   border-radius: 10px;
+}
+
+.navigation-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 10px;
+  margin: 20px 10px;
+}
+
+.navigation-button.MuiButton-root {
+  border: 1px solid lightgray;
+  border-radius: 25px;
+  text-transform: none;
+  color: black;
+  font-weight: bold;
 }

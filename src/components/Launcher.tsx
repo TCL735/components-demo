@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { IconLayoutGrid } from "@tabler/icons-react";
 import { Contents } from "./Contents";
+import { groups } from "./Sections";
 import { useKeyPress } from "../utils/hooks";
 import "./Launcher.css";
 
@@ -53,7 +54,7 @@ export function Launcher() {
         aria-describedby="modal-description"
       >
         <DialogContent id="modal-content">
-          <Contents />
+          <Contents groups={groups} />
         </DialogContent>
       </Dialog>
     </>
