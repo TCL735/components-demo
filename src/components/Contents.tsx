@@ -8,7 +8,8 @@ import {
   Typography,
 } from "@mui/material";
 import { IconSearch, IconArrowsRightLeft } from "@tabler/icons-react";
-import { GroupName, Group, sections, IconColor } from "./Sections";
+import { GroupName, Group, IconColor } from "./types";
+import { sections } from "../data";
 import "./Contents.css";
 import { GroupsContext, SectionsContext } from "../utils/hooks";
 
@@ -55,7 +56,7 @@ export const ContentNavigation: FC<ContentNavigationProps> = ({
               selectedGroup === group.name
                 ? {
                     backgroundColor: IconColor[group.name],
-                    color: "#ffffff",
+                    color: "#ffffff !important",
                   }
                 : null
             }

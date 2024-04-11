@@ -5,7 +5,8 @@ import {
   useLayoutEffect,
   useRef,
 } from "react";
-import { Group, Section, groups, sections } from "../components/Sections";
+import { Group, Section } from "../components/types";
+import { groups, sections } from "../data";
 
 export const useKeyPress = (
   keys: string[],
