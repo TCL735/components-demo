@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { IconLayoutGrid } from "@tabler/icons-react";
 import { Contents } from "./Contents";
-import { groups } from "./Sections";
+import { groups } from "../data";
 import { useKeyPress, GroupsContext } from "../utils/hooks";
 import "./Launcher.css";
 
