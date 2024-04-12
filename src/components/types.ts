@@ -9,8 +9,14 @@ export enum GroupName {
   Settings = "Settings",
 }
 
+export enum Mode {
+  Main = "main",
+  Command = "command",
+}
+
 export enum IconColor {
   All = "lightgreen",
+  Command = "white",
   Data = "blue",
   Security = "purple",
   Store = "grey",
@@ -29,6 +35,7 @@ export interface Section {
   iconColor: IconColor;
   group: GroupName;
   name: string;
+  labels?: Array<string>;
   description: string;
-  shortcut: string;
+  shortcut?: string;
 }

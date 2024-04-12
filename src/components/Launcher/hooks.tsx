@@ -1,12 +1,13 @@
 import React, {
+  ReactNode,
   createContext,
   useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
 } from "react";
-import { Group, GroupName, Section } from "../types";
-import { groups, sections } from "../../data";
+import { Group, GroupName, Mode, Section } from "../types";
+import { commands, groups, sections } from "../../data";
 
 export const useKeyPress = (
   keys: string[],
@@ -41,11 +42,24 @@ export const useKeyPress = (
 
 export const GroupsContext = createContext<Array<Group>>(groups);
 export const SectionsContext = createContext<Array<Section>>(sections);
+export const CommandsContext = createContext<Array<Section>>(commands);
+export const DataProvider = ({ children }: { children: ReactNode }) => {
+  return (
+    <GroupsContext.Provider value={groups}>
+      <SectionsContext.Provider value={sections}>
+        <CommandsContext.Provider value={commands}>
+          {children}
+        </CommandsContext.Provider>
+      </SectionsContext.Provider>
+    </GroupsContext.Provider>
+  );
+};
 
 type State = {
   isLauncherOpen: boolean;
   selectedGroup: GroupName;
   searchTerm: string;
+  mode: Mode;
   groups: Array<Group>;
   sections: Array<Section>;
 };
@@ -55,13 +69,15 @@ export const OPEN_LAUNCHER = "open launcher";
 export const TOGGLE_LAUNCHER = "toggle launcher";
 export const SET_SEARCH_TERM = "set search term";
 export const SET_SELECTED_GROUP = "set selected group";
+export const SET_MODE = "set mode";
 
 export type Action =
   | { type: typeof CLOSE_LAUNCHER }
   | { type: typeof OPEN_LAUNCHER }
   | { type: typeof TOGGLE_LAUNCHER }
   | { type: typeof SET_SEARCH_TERM; searchTerm: string }
-  | { type: typeof SET_SELECTED_GROUP; selectedGroup: GroupName };
+  | { type: typeof SET_SELECTED_GROUP; selectedGroup: GroupName }
+  | { type: typeof SET_MODE; mode: Mode };
 
 export const INITIAL_STATE: State = {
   isLauncherOpen: false,
@@ -69,6 +85,7 @@ export const INITIAL_STATE: State = {
   searchTerm: "",
   groups,
   sections,
+  mode: Mode.Main,
 };
 
 export const reducer = (state: State, action: Action) => {
@@ -101,6 +118,12 @@ export const reducer = (state: State, action: Action) => {
       return {
         ...state,
         selectedGroup: action.selectedGroup,
+      };
+    }
+    case SET_MODE: {
+      return {
+        ...state,
+        mode: action.mode,
       };
     }
     default:

@@ -1,7 +1,12 @@
 import React, { FC, forwardRef, useContext, useMemo } from "react";
-import { Box, Button, Grid, Typography } from "@mui/material";
-import { GroupName } from "../types";
-import { GroupsContext, SectionsContext } from "./hooks";
+import { Box, Button, Chip, Grid, Typography } from "@mui/material";
+import { GroupName, Mode } from "../types";
+import {
+  CommandsContext,
+  GroupsContext,
+  SectionsContext,
+  StateContext,
+} from "./hooks";
 import "./Contents.css";
 
 interface ContentGroupProps {
@@ -9,10 +14,15 @@ interface ContentGroupProps {
 }
 export const ContentGroup: FC<ContentGroupProps> = ({ groupName }) => {
   const sections = useContext(SectionsContext);
-  const sectionRows = useMemo(
-    () => sections.filter((section) => section.group === groupName),
-    [groupName, sections],
-  );
+  const commands = useContext(CommandsContext);
+  const { mode } = useContext(StateContext);
+
+  const sectionRows = useMemo(() => {
+    if (mode === Mode.Command) {
+      return commands.filter((command) => command.group === groupName);
+    }
+    return sections.filter((section) => section.group === groupName);
+  }, [groupName, mode, commands, sections]);
 
   return (
     <Grid item xs={12}>
@@ -25,7 +35,7 @@ export const ContentGroup: FC<ContentGroupProps> = ({ groupName }) => {
           return (
             <Box key={section.name} className="section-row">
               <Box
-                className="section-icon-container"
+                className={`${mode}-icon-container`}
                 style={{ backgroundColor: section.iconColor }}
               >
                 <Icon />
@@ -33,16 +43,29 @@ export const ContentGroup: FC<ContentGroupProps> = ({ groupName }) => {
               <Typography variant="h6" className="section-name">
                 {section.name}
               </Typography>
+              {section.labels &&
+                section.labels.map((label, index) => {
+                  const color = index === 0 ? "primary" : "success";
+                  return (
+                    <Chip
+                      className="command-label"
+                      label={label}
+                      color={color}
+                    />
+                  );
+                })}
               <Typography className="section-description">
                 {section.description}
               </Typography>
-              <Button
-                variant="outlined"
-                className="section-button-shortcut"
-                size="small"
-              >
-                <span>{section.shortcut}</span>
-              </Button>
+              {section.shortcut && (
+                <Button
+                  variant="outlined"
+                  className="section-button-shortcut"
+                  size="small"
+                >
+                  <span>{section.shortcut}</span>
+                </Button>
+              )}
             </Box>
           );
         })}
@@ -55,18 +78,30 @@ export const Contents = forwardRef(
   (props: { selectedGroup: GroupName }, ref) => {
     const { selectedGroup } = props;
     const groups = useContext(GroupsContext);
-    const filteredGroups = groups.filter((group) => {
-      if (selectedGroup === GroupName.All) {
-        return true;
-      }
-      return selectedGroup === group.name;
-    });
+    const commands = useContext(CommandsContext);
+    const { mode } = useContext(StateContext);
+
+    const commandGroups = new Set<GroupName>();
+    if (mode === Mode.Command) {
+      commands.forEach((command) => commandGroups.add(command.group));
+    }
+    const filteredGroupNames =
+      mode === Mode.Main
+        ? groups
+            .filter((group) => {
+              if (selectedGroup === GroupName.All) {
+                return true;
+              }
+              return selectedGroup === group.name;
+            })
+            .map((group) => group.name)
+        : Array.from(commandGroups);
 
     return (
       <Box className="contents" mx={10} my={5} ref={ref}>
         <Grid container rowSpacing={2} className="content-body">
-          {filteredGroups.map((group) => (
-            <ContentGroup key={group.name} groupName={group.name} />
+          {filteredGroupNames.map((name) => (
+            <ContentGroup key={name} groupName={name} />
           ))}
         </Grid>
       </Box>
