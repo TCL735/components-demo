@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useContext, useReducer } from "react";
+import React, { useCallback, useReducer } from "react";
 import {
   Button,
   Dialog,
@@ -7,14 +7,12 @@ import {
   TextField,
 } from "@mui/material";
 import { IconLayoutGrid } from "@tabler/icons-react";
-import { groups, sections } from "../../data";
 import {
   ActionContext,
   CLOSE_LAUNCHER,
-  GroupsContext,
+  DataProvider,
   INITIAL_STATE,
   OPEN_LAUNCHER,
-  SectionsContext,
   StateContext,
   reducer,
   useKeyPress,
@@ -22,16 +20,6 @@ import {
 import { Contents } from "./Contents";
 import { Header } from "./Header";
 import "./Launcher.css";
-
-export const DataProvider = ({ children }: { children: ReactNode }) => {
-  return (
-    <GroupsContext.Provider value={groups}>
-      <SectionsContext.Provider value={sections}>
-        {children}
-      </SectionsContext.Provider>
-    </GroupsContext.Provider>
-  );
-};
 
 export function Launcher() {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);

@@ -1,9 +1,12 @@
+.modal-content.MuiDialogContent-root {
+  background-color: #f8f8f8;
+}
 .contents.MuiBox-root {
   margin: 0;
   position: relative;
 }
 
-.section-row {
+.section-row.MuiBox-root {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -30,13 +33,23 @@
   color: grey;
 }
 
-.section-icon-container {
+.main-icon-container.MuiBox-root,
+.command-icon-container.MuiBox-root {
   border: 1px solid black;
-  color: white;
   border-radius: 5px;
+}
+.main-icon-container {
+  color: white;
+}
+.command-icon-container {
+  color: black;
 }
 
 .section-button-shortcut.MuiButton-root {
   margin-left: auto;
   border-radius: 10px;
+}
+.command-label.MuiChip-root {
+  color: black;
+  font-weight: bold;
 }

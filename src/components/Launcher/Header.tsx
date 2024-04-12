@@ -1,8 +1,15 @@
 import React, { FC, useCallback, useContext } from "react";
 import { Box, Button, InputAdornment, TextField } from "@mui/material";
 import { IconSearch, IconArrowsRightLeft } from "@tabler/icons-react";
-import { GroupName, Group, IconColor } from "../types";
-import { ActionContext, GroupsContext, SET_SELECTED_GROUP } from "./hooks";
+import { GroupName, Group, IconColor, Mode } from "../types";
+import {
+  ActionContext,
+  GroupsContext,
+  SET_MODE,
+  SET_SEARCH_TERM,
+  SET_SELECTED_GROUP,
+  StateContext,
+} from "./hooks";
 import "./Header.css";
 
 interface HeaderProps {
@@ -34,6 +41,7 @@ export const Navigation: FC<NavigationProps> = ({ groups, selectedGroup }) => {
     () => dispatch({ type: SET_SELECTED_GROUP, selectedGroup: GroupName.All }),
     [dispatch],
   );
+
   return (
     <Box className="navigation-bar">
       <Button
@@ -76,8 +84,40 @@ export const Navigation: FC<NavigationProps> = ({ groups, selectedGroup }) => {
   );
 };
 
+interface SearchBarButtonProps {
+  type: Mode;
+}
+export const SearchBarButton: FC<SearchBarButtonProps> = ({ type }) => {
+  if (type === Mode.Command) {
+    return (
+      <Button className="search-bar-button" variant="outlined" size="large">
+        <span>↩ Run Command</span>
+      </Button>
+    );
+  }
+  return (
+    <Button className="search-bar-button" variant="outlined" size="large">
+      <span>'/' for commands</span>
+    </Button>
+  );
+};
+
 export const Header: FC<HeaderProps> = ({ selectedGroup }) => {
   const groups = useContext(GroupsContext);
+  const dispatch = useContext(ActionContext);
+  const { mode } = useContext(StateContext);
+
+  const handleChange: React.ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement
+  > = (e) => {
+    const searchTerm = e.target.value;
+    if (searchTerm.startsWith("/")) {
+      dispatch({ type: SET_MODE, mode: Mode.Command });
+    } else if (mode === Mode.Command) {
+      dispatch({ type: SET_MODE, mode: Mode.Main });
+    }
+    dispatch({ type: SET_SEARCH_TERM, searchTerm });
+  };
 
   return (
     <Box className="header">
@@ -87,6 +127,7 @@ export const Header: FC<HeaderProps> = ({ selectedGroup }) => {
           autoFocus
           fullWidth
           placeholder="Find info, Ask questions or Run queries"
+          onChange={handleChange}
           InputProps={{
             className: "textfield-search-input",
             startAdornment: (
@@ -96,19 +137,15 @@ export const Header: FC<HeaderProps> = ({ selectedGroup }) => {
             ),
             endAdornment: (
               <InputAdornment position="end">
-                <Button
-                  className="button-command-slash"
-                  variant="outlined"
-                  size="large"
-                >
-                  <span>'/' for commands</span>
-                </Button>
+                <SearchBarButton type={mode} />
               </InputAdornment>
             ),
           }}
         />
       </Box>
-      <Navigation groups={groups} selectedGroup={selectedGroup} />
+      {mode === Mode.Main && (
+        <Navigation groups={groups} selectedGroup={selectedGroup} />
+      )}
     </Box>
   );
 };
