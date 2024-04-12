@@ -1,34 +1,39 @@
-import React, { FC, useContext } from "react";
+import React, { FC, useCallback, useContext } from "react";
 import { Box, Button, InputAdornment, TextField } from "@mui/material";
 import { IconSearch, IconArrowsRightLeft } from "@tabler/icons-react";
 import { GroupName, Group, IconColor } from "../types";
-import { GroupsContext } from "../../utils/hooks";
+import { ActionContext, GroupsContext, SET_SELECTED_GROUP } from "./hooks";
 import "./Header.css";
 
 interface HeaderProps {
   selectedGroup: GroupName;
-  setSelectedGroup: React.Dispatch<React.SetStateAction<GroupName>>;
 }
 
 interface NavigationProps extends HeaderProps {
   groups: Array<Group>;
 }
 
-export const Navigation: FC<NavigationProps> = ({
-  groups,
-  selectedGroup,
-  setSelectedGroup,
-}) => {
+export const Navigation: FC<NavigationProps> = ({ groups, selectedGroup }) => {
+  const dispatch = useContext(ActionContext);
+
   const handleButtonTab = () => {
     const currentIndex = groups.findIndex(
       (group) => group.name === selectedGroup,
     );
     if (currentIndex === groups.length - 1) {
-      setSelectedGroup(GroupName.All);
+      dispatch({ type: SET_SELECTED_GROUP, selectedGroup: GroupName.All });
     } else {
-      setSelectedGroup(groups[currentIndex + 1].name);
+      dispatch({
+        type: SET_SELECTED_GROUP,
+        selectedGroup: groups[currentIndex + 1].name,
+      });
     }
   };
+
+  const handleClickAll = useCallback(
+    () => dispatch({ type: SET_SELECTED_GROUP, selectedGroup: GroupName.All }),
+    [dispatch],
+  );
   return (
     <Box className="navigation-bar">
       <Button
@@ -36,7 +41,7 @@ export const Navigation: FC<NavigationProps> = ({
         sx={{
           backgroundColor: selectedGroup === GroupName.All ? IconColor.All : "",
         }}
-        onClick={() => setSelectedGroup(GroupName.All)}
+        onClick={handleClickAll}
       >
         All
       </Button>
@@ -54,7 +59,9 @@ export const Navigation: FC<NavigationProps> = ({
                   }
                 : null
             }
-            onClick={() => setSelectedGroup(group.name)}
+            onClick={() =>
+              dispatch({ type: SET_SELECTED_GROUP, selectedGroup: group.name })
+            }
           >
             <NavIcon />
             {group.name}
@@ -69,10 +76,7 @@ export const Navigation: FC<NavigationProps> = ({
   );
 };
 
-export const Header: FC<HeaderProps> = ({
-  selectedGroup,
-  setSelectedGroup,
-}) => {
+export const Header: FC<HeaderProps> = ({ selectedGroup }) => {
   const groups = useContext(GroupsContext);
 
   return (
@@ -104,11 +108,7 @@ export const Header: FC<HeaderProps> = ({
           }}
         />
       </Box>
-      <Navigation
-        groups={groups}
-        selectedGroup={selectedGroup}
-        setSelectedGroup={setSelectedGroup}
-      />
+      <Navigation groups={groups} selectedGroup={selectedGroup} />
     </Box>
   );
 };

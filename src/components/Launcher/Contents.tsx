@@ -1,8 +1,7 @@
 import React, { FC, forwardRef, useContext, useMemo } from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { GroupName } from "../types";
-import { sections } from "../../data";
-import { GroupsContext, SectionsContext } from "../../utils/hooks";
+import { GroupsContext, SectionsContext } from "./hooks";
 import "./Contents.css";
 
 interface ContentGroupProps {
@@ -66,11 +65,9 @@ export const Contents = forwardRef(
     return (
       <Box className="contents" mx={10} my={5} ref={ref}>
         <Grid container rowSpacing={2} className="content-body">
-          <SectionsContext.Provider value={sections}>
-            {filteredGroups.map((group) => (
-              <ContentGroup key={group.name} groupName={group.name} />
-            ))}
-          </SectionsContext.Provider>
+          {filteredGroups.map((group) => (
+            <ContentGroup key={group.name} groupName={group.name} />
+          ))}
         </Grid>
       </Box>
     );

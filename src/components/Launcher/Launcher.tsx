@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactNode, useCallback, useContext, useReducer } from "react";
 import {
   Button,
   Dialog,
@@ -7,25 +7,51 @@ import {
   TextField,
 } from "@mui/material";
 import { IconLayoutGrid } from "@tabler/icons-react";
-import { groups } from "../../data";
-import { useKeyPress, GroupsContext } from "../../utils/hooks";
-import { GroupName } from "../types";
+import { groups, sections } from "../../data";
+import {
+  ActionContext,
+  CLOSE_LAUNCHER,
+  GroupsContext,
+  INITIAL_STATE,
+  OPEN_LAUNCHER,
+  SectionsContext,
+  StateContext,
+  reducer,
+  useKeyPress,
+} from "./hooks";
 import { Contents } from "./Contents";
 import { Header } from "./Header";
 import "./Launcher.css";
 
-export function Launcher() {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  useKeyPress(["e"], (event) => {
-    setIsOpen(true);
-  });
-  const [selectedGroup, setSelectedGroup] = useState(GroupName.All);
+export const DataProvider = ({ children }: { children: ReactNode }) => {
+  return (
+    <GroupsContext.Provider value={groups}>
+      <SectionsContext.Provider value={sections}>
+        {children}
+      </SectionsContext.Provider>
+    </GroupsContext.Provider>
+  );
+};
 
-  const handleClick = () => setIsOpen(true);
-  const handleClose = () => setIsOpen(false);
+export function Launcher() {
+  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const { isLauncherOpen, selectedGroup } = state;
+
+  useKeyPress(["e"], (event) => {
+    dispatch({ type: OPEN_LAUNCHER });
+  });
+
+  const handleClick = useCallback(() => {
+    dispatch({ type: OPEN_LAUNCHER });
+  }, [dispatch]);
+  const handleClose = useCallback(
+    () => dispatch({ type: CLOSE_LAUNCHER }),
+    [dispatch],
+  );
+
   return (
     <>
-      {!isOpen ? (
+      {!isLauncherOpen ? (
         <TextField
           fullWidth
           onClick={handleClick}
@@ -46,26 +72,27 @@ export function Launcher() {
           }}
         />
       ) : null}
-      <GroupsContext.Provider value={groups}>
-        <Dialog
-          className="modal"
-          fullWidth
-          maxWidth="lg"
-          open={isOpen}
-          onClose={handleClose}
-          aria-modal="true"
-          aria-labelledby="modal-title-stuff"
-          aria-describedby="modal-description"
-        >
-          <Header
-            selectedGroup={selectedGroup}
-            setSelectedGroup={setSelectedGroup}
-          />
-          <DialogContent className="modal-content">
-            <Contents selectedGroup={selectedGroup} />
-          </DialogContent>
-        </Dialog>
-      </GroupsContext.Provider>
+      <DataProvider>
+        <ActionContext.Provider value={dispatch}>
+          <StateContext.Provider value={state}>
+            <Dialog
+              className="modal"
+              fullWidth
+              maxWidth="lg"
+              open={isLauncherOpen}
+              onClose={handleClose}
+              aria-modal="true"
+              aria-labelledby="modal-title-stuff"
+              aria-describedby="modal-description"
+            >
+              <Header selectedGroup={selectedGroup} />
+              <DialogContent className="modal-content">
+                <Contents selectedGroup={selectedGroup} />
+              </DialogContent>
+            </Dialog>
+          </StateContext.Provider>
+        </ActionContext.Provider>
+      </DataProvider>
     </>
   );
 }
